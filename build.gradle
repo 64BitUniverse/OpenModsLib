@@ -7,8 +7,8 @@ buildscript {
             url = 'http://files.minecraftforge.net/maven'
         }
         maven {
-              name 'OpenMods Third Party'
-              url 'http://repo.openmods.info/artifactory/simple/thirdparty'
+            name 'OpenMods Third Party'
+            url uri('/home/user/Downloads/repo.openmods.info/artifactory/simple/thirdparty')
         }
     }
 
@@ -36,11 +36,11 @@ rootProject.allprojects {
         }
         maven {
             name "OpenMods"
-            url "http://repo.openmods.info/artifactory/openmods"
+            url uri('/home/user/Downloads/repo.openmods.info/artifactory/openmods')
         }
         maven {
             name "OpenMods Extras"
-            url 'http://repo.openmods.info/artifactory/thirdparty'
+            url uri('/home/user/Downloads/repo.openmods.info/artifactory/thirdparty')
         }
     }
 }
