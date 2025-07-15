@@ -26,7 +26,7 @@ import net.minecraftforge.common.model.animation.IAnimationStateMachine;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import openmods.LibConfig;
-import openmods.OpenMods;
+import openmods.OpenModsOld;
 import openmods.block.BlockSelectionHandler;
 import openmods.calc.CommandCalc;
 import openmods.calc.CommandCalcFactory;
@@ -107,7 +107,7 @@ public final class OpenClientProxy implements IOpenModsProxy {
 	@Override
 	public void preInit() {
 		ClientCommandHandler.instance.registerCommand(new CommandConfig("om_config_c", false));
-		ClientCommandHandler.instance.registerCommand(new CommandSource("om_source_c", false, OpenMods.instance.getCollector()));
+		ClientCommandHandler.instance.registerCommand(new CommandSource("om_source_c", false, OpenModsOld.instance.getCollector()));
 		ClientCommandHandler.instance.registerCommand(new CommandGlDebug());
 
 		if (LibConfig.enableCalculatorCommands) {
@@ -132,7 +132,7 @@ public final class OpenClientProxy implements IOpenModsProxy {
 				.put("eval", EvalModel.EMPTY)
 				.put("eval-expand", EvalExpandModel.EMPTY)
 				.put("perspective-aware", PerspectiveAwareModel.EMPTY)
-				.build(OpenMods.MODID));
+				.build(OpenModsOld.MODID));
 
 		((IReloadableResourceManager)Minecraft.getMinecraft().getResourceManager()).registerReloadListener(hitboxManager);
 
@@ -187,7 +187,7 @@ public final class OpenClientProxy implements IOpenModsProxy {
 	@Override
 	public void runCustomItemModelProvider(final ResourceLocation location, final Item item, Class<? extends ICustomItemModelProvider> providerCls) {
 		final ICustomItemModelProvider provider = customItemModelProviders.getOrCreate(providerCls);
-		provider.addCustomItemModels(item, location, (meta, modelLocation) -> OpenMods.proxy.registerCustomItemModel(item, meta, modelLocation));
+		provider.addCustomItemModels(item, location, (meta, modelLocation) -> OpenModsOld.proxy.registerCustomItemModel(item, meta, modelLocation));
 	}
 
 	@Override

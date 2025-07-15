@@ -26,7 +26,7 @@ import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 import openmods.Log;
-import openmods.OpenMods;
+import openmods.OpenModsOld;
 import openmods.config.BlockInstances;
 import openmods.config.InstanceContainer;
 import openmods.config.ItemInstances;
@@ -310,7 +310,7 @@ public class GameRegistryObjectsProvider {
 	}
 
 	private static void registerCustomItemModels(Item item, ResourceLocation itemLocation, Class<? extends ICustomItemModelProvider> providerCls) {
-		OpenMods.proxy.runCustomItemModelProvider(itemLocation, item, providerCls);
+		OpenModsOld.proxy.runCustomItemModelProvider(itemLocation, item, providerCls);
 	}
 
 	private static void setBlockPrefixedId(String id, String blockName, IdDecorator decorator, IdSetter setter) {
@@ -446,7 +446,7 @@ public class GameRegistryObjectsProvider {
 
 	public void registerItemModels() {
 		for (Map.Entry<Item, ResourceLocation> modelId : itemModelIds.entrySet())
-			OpenMods.proxy.bindItemModelToItemMeta(modelId.getKey(), 0, modelId.getValue());
+			OpenModsOld.proxy.bindItemModelToItemMeta(modelId.getKey(), 0, modelId.getValue());
 	}
 
 }

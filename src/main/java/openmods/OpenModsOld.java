@@ -65,8 +65,8 @@ import openmods.utils.bitmap.IRpcIntBitMap;
 import openmods.world.DelayedActionTickHandler;
 import openmods.world.DropCapture;
 
-@Mod(modid = OpenMods.MODID, name = OpenMods.MODID, version = OpenMods.VERSION, dependencies = OpenMods.DEPENDENCIES, guiFactory = OpenMods.GUI_FACTORY, updateJSON = OpenMods.UPDATE_JSON, certificateFingerprint = OpenMods.CERTIFICATE_FINGERPRINT)
-public class OpenMods {
+@Mod(modid = OpenModsOld.MODID, name = OpenModsOld.MODID, version = OpenModsOld.VERSION, dependencies = OpenModsOld.DEPENDENCIES, guiFactory = OpenModsOld.GUI_FACTORY, updateJSON = OpenModsOld.UPDATE_JSON, certificateFingerprint = OpenModsOld.CERTIFICATE_FINGERPRINT)
+public class OpenModsOld {
 
 	public static final String MODID = "openmods";
 	public static final String MODNAME = "OpenModsLib";
@@ -79,7 +79,7 @@ public class OpenMods {
 	private static final int ENTITY_BLOCK_ID = 804;
 
 	@Instance(MODID)
-	public static OpenMods instance;
+	public static OpenModsOld instance;
 
 	@SidedProxy(clientSide = "openmods.proxy.OpenClientProxy", serverSide = "openmods.proxy.OpenServerProxy")
 	public static IOpenModsProxy proxy;
@@ -171,7 +171,7 @@ public class OpenMods {
 
 		final CompoundDataFixer dataFixer = FMLCommonHandler.instance().getDataFixer();
 
-		EntityRegistry.registerModEntity(OpenMods.location("block"), EntityBlock.class, "Block", ENTITY_BLOCK_ID, instance, 64, 1, true);
+		EntityRegistry.registerModEntity(OpenModsOld.location("block"), EntityBlock.class, "Block", ENTITY_BLOCK_ID, instance, 64, 1, true);
 		EntityBlock.registerFixes(dataFixer, EntityBlock.class);
 		proxy.preInit();
 	}

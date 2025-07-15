@@ -19,7 +19,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import openmods.OpenMods;
+import openmods.OpenModsOld;
 
 public abstract class ItemGeneric extends Item {
 
@@ -39,7 +39,7 @@ public abstract class ItemGeneric extends Item {
 		IMetaItem prev = metaitems.put(id, item);
 		Preconditions.checkState(prev == null, "Config error: replacing meta item %s with %s", prev, item);
 
-		OpenMods.proxy.registerCustomItemModel(this, id, item.getLocation());
+		OpenModsOld.proxy.registerCustomItemModel(this, id, item.getLocation());
 	}
 
 	@Override

@@ -15,7 +15,7 @@ import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.registries.IForgeRegistry;
 import openmods.Log;
-import openmods.OpenMods;
+import openmods.OpenModsOld;
 import openmods.utils.CommonRegistryCallbacks;
 
 @Sharable
@@ -69,7 +69,7 @@ public class NetworkEventCodec extends MessageToMessageCodec<FMLProxyPacket, Net
 		event.side = side;
 
 		final INetHandler handler = msg.handler();
-		if (handler != null) event.sender = OpenMods.proxy.getPlayerFromHandler(handler);
+		if (handler != null) event.sender = OpenModsOld.proxy.getPlayerFromHandler(handler);
 
 		final int bufferJunkSize = payload.readableBytes();
 		if (bufferJunkSize > 0) Log.warn("%s junk bytes left in buffer, event %s", bufferJunkSize, event);

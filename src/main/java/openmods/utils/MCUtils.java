@@ -1,18 +1,18 @@
 package openmods.utils;
 
 import java.io.File;
-import openmods.OpenMods;
+import openmods.OpenModsOld;
 
 public class MCUtils {
 	public static String getLogFileName() {
-		return OpenMods.proxy.getLogFileName();
+		return OpenModsOld.proxy.getLogFileName();
 	}
 
 	public static String getMinecraftDir() {
-		return OpenMods.proxy.getMinecraftDir().getAbsolutePath();
+		return OpenModsOld.proxy.getMinecraftDir().getAbsolutePath();
 	}
 
 	public static String getConfigDir() {
-		return new File(OpenMods.proxy.getMinecraftDir(), "config").getAbsolutePath();
+		return new File(OpenModsOld.proxy.getMinecraftDir(), "config").getAbsolutePath();
 	}
 }

@@ -1,206 +1,188 @@
-buildscript {
-    repositories {
-        jcenter()
-        mavenCentral()
-        maven {
-            name = 'Forge'
-            url = 'http://files.minecraftforge.net/maven'
-        }
-        maven {
-            name 'OpenMods Third Party'
-            url uri('/home/user/Downloads/repo.openmods.info/artifactory/simple/thirdparty')
-        }
-    }
-
-    dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
-        classpath 'net.thesilkminer.gradle.translationchecker:TranslationChecker:1.1'
-    }
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'net.neoforged.moddev' version '2.0.99'
+    id 'idea'
 }
 
-apply plugin: 'net.minecraftforge.gradle.forge'
-apply plugin: 'java'
-
-// HACK: we want to add those repos to all including projects, but still be available to compile this project directly
-rootProject.allprojects {
-    repositories {
-        mavenCentral()
-        jcenter()
-        maven {
-            name 'Forge'
-            url 'http://files.minecraftforge.net/maven'
-        }
-        maven {
-            name 'MinecraftS3'
-            url 'http://s3.amazonaws.com/Minecraft.Download/libraries'
-        }
-        maven {
-            name "OpenMods"
-            url uri('/home/user/Downloads/repo.openmods.info/artifactory/openmods')
-        }
-        maven {
-            name "OpenMods Extras"
-            url uri('/home/user/Downloads/repo.openmods.info/artifactory/thirdparty')
-        }
-    }
+tasks.named('wrapper', Wrapper).configure {
+    // Define wrapper values here so as to not have to always do so when updating gradlew.properties.
+    // Switching this to Wrapper.DistributionType.ALL will download the full gradle sources that comes with
+    // documentation attached on cursor hover of gradle classes and methods. However, this comes with increased
+    // file size for Gradle. If you do switch this to ALL, run the Gradle wrapper task twice afterwards.
+    // (Verify by checking gradle/wrapper/gradle-wrapper.properties to see if distributionUrl now points to `-all`)
+    distributionType = Wrapper.DistributionType.BIN
 }
 
-/*
+version = mod_version
+group = mod_group_id
+
 repositories {
-    maven {
-        name "local"
-        url ('file:/' + project.file('repo').getAbsolutePath())
+    // Add here additional repositories if required by some of the dependencies below.
+}
+
+base {
+    archivesName = mod_id
+}
+
+// Mojang ships Java 17 to end users in 1.20.4, so mods should target Java 17.
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+neoForge {
+    // Specify the version of NeoForge to use.
+    version = project.neo_version
+
+    parchment {
+        mappingsVersion = project.parchment_mappings_version
+        minecraftVersion = project.parchment_minecraft_version
+    }
+
+    // This line is optional. Access Transformers are automatically detected
+    // accessTransformers = project.files('src/main/resources/META-INF/accesstransformer.cfg')
+
+    // Default run configurations.
+    // These can be tweaked, removed, or duplicated as needed.
+    runs {
+        client {
+            client()
+
+            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+
+        server {
+            server()
+            programArgument '--nogui'
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+
+        // This run config launches GameTestServer and runs all registered gametests, then exits.
+        // By default, the server will crash when no gametests are provided.
+        // The gametest system is also enabled by default for other run configs under the /test command.
+        gameTestServer {
+            type = "gameTestServer"
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+
+        data {
+            data()
+
+            // example of overriding the workingDirectory set in configureEach above, uncomment if you want to use it
+            // gameDirectory = project.file('run-data')
+
+            // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
+            programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+        }
+
+        // applies to all the run configs above
+        configureEach {
+            // Recommended logging data for a userdev environment
+            // The markers can be added/remove as needed separated by commas.
+            // "SCAN": For mods scan.
+            // "REGISTRIES": For firing of registry events.
+            // "REGISTRYDUMP": For getting the contents of all registries.
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+
+            // Recommended logging level for the console
+            // You can set various levels here.
+            // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
+            logLevel = org.slf4j.event.Level.DEBUG
+        }
+    }
+
+    mods {
+        // define mod <-> source bindings
+        // these are used to tell the game which sources are for which mod
+        // multi mod projects should define one per mod
+        "${mod_id}" {
+            sourceSet(sourceSets.main)
+        }
     }
 }
-*/
 
+// Include resources generated by data generators.
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+// Sets up a dependency configuration called 'localRuntime'.
+// This configuration should be used instead of 'runtimeOnly' to declare
+// a dependency that will be present for runtime testing but that is
+// "optional", meaning it will not be pulled by dependents of this mod.
 configurations {
-    shade {
-        transitive = false
-    }
-    compile.extendsFrom shade
+    runtimeClasspath.extendsFrom localRuntime
 }
 
 dependencies {
-    shade group: 'info.openmods', name: 'calc', version: '0.3'
+    // Example optional mod dependency with JEI
+    // The JEI API is declared for compile time use, while the full JEI artifact is used at runtime
+    // compileOnly "mezz.jei:jei-${mc_version}-common-api:${jei_version}"
+    // compileOnly "mezz.jei:jei-${mc_version}-neoforge-api:${jei_version}"
+    // We add the full version to localRuntime, not runtimeOnly, so that we do not publish a dependency on it
+    // localRuntime "mezz.jei:jei-${mc_version}-neoforge:${jei_version}"
 
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-    testCompile "org.mockito:mockito-core:1.10.19"
+    // Example mod dependency using a mod jar from ./libs with a flat dir repository
+    // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar
+    // The group id is ignored when searching -- in this case, it is "blank"
+    // implementation "blank:coolmod-${mc_version}:${coolmod_version}"
+
+    // Example mod dependency using a file as dependency
+    // implementation files("libs/coolmod-${mc_version}-${coolmod_version}.jar")
+
+    // Example project dependency using a sister or child project:
+    // implementation project(":myproject")
+
+    // For more info:
+    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
+    // http://www.gradle.org/docs/current/userguide/dependency_management.html
 }
 
-def String git(String... arguments) {
-    def out = new ByteArrayOutputStream()
-    exec {
-        executable = 'git'
-        args = arguments.toList()
-        standardOutput = out
+// This block of code expands all declared replace properties in the specified resource targets.
+// A missing property will result in an error. Properties are expanded using ${} Groovy notation.
+var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
+    var replaceProperties = [
+            minecraft_version      : minecraft_version,
+            minecraft_version_range: minecraft_version_range,
+            neo_version            : neo_version,
+            loader_version_range   : loader_version_range,
+            mod_id                 : mod_id,
+            mod_name               : mod_name,
+            mod_license            : mod_license,
+            mod_version            : mod_version,
+            mod_authors            : mod_authors,
+            mod_description        : mod_description
+    ]
+    inputs.properties replaceProperties
+    expand replaceProperties
+    from "src/main/templates"
+    into "build/generated/sources/modMetadata"
+}
+// Include the output of "generateModMetadata" as an input directory for the build
+// this works with both building through Gradle and the IDE.
+sourceSets.main.resources.srcDir generateModMetadata
+// To avoid having to run "generateModMetadata" manually, make it run on every project reload
+neoForge.ideSyncTask generateModMetadata
+
+// Example configuration to allow publishing using the maven-publish plugin
+publishing {
+    publications {
+        register('mavenJava', MavenPublication) {
+            from components.java
+        }
     }
-    out.toString().trim()
-}
-
-def String gitHash() {
-    git 'rev-parse', '--short', 'HEAD'
-}
-
-def String gitBranch() {
-    git 'rev-parse', '--abbrev-ref', 'HEAD'
-}
-
-def env = System.getenv()
-
-version = mc_ver + "-" + mod_version
-
-def in_jenkins = false
-
-def jenkinsManifest = manifest {
-    if (env.BUILD_TAG != null) { // If this works, we'll assume we're in Jenkins atleast.
-        attributes("Jenkins-Build": "true", "Jenkins-Tag": env.BUILD_TAG, "Jenkins-ID": env.BUILD_ID)
-        in_jenkins = true
-    } else {
-        attributes("Jenkins-Build": "false")
-    }
-}
-
-def branch = in_jenkins ? env.GIT_BRANCH.minus("origin/") : gitBranch()
-def hash = gitHash()
-
-if (branch != null && !branch.equals("master")) {
-    version += "-" + branch
-}
-
-if (env.BUILD_NUMBER != null) {
-    version += "-snapshot-" + env.BUILD_NUMBER
-}
-
-def gitManifest = manifest {
-    if (branch != null) {
-        attributes("Git-Branch": branch, "Git-Hash": hash)
-    }
-}
-
-minecraft {
-    version = mc_ver + "-" + forge_ver
-    runDir = "run"
-
-    mappings = mcp_mappings
-
-    replaceIn "openmods/OpenMods.java"
-    replaceIn "openmods/core/OpenModsCore.java"
-    replaceIn "openmods/core/OpenModsCorePlugin.java"
-    replace '$LIB-VERSION$', mod_version
-}
-
-processResources {
-    inputs.property "version", mod_version
-    inputs.property "mcversion", project.minecraft.version
-
-    // Process mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
-        include '**/*.info'
-        expand 'version':mod_version, 'mc_version':mc_ver
-    }
-
-    // Copy anything else directly
-    from(sourceSets.main.resources.srcDirs) {
-        exclude '**/*.info'
-    }
-}
-
-def fmlManifest = manifest {
-    attributes(
-        "FMLCorePlugin": "openmods.core.OpenModsCorePlugin",
-        "FMLCorePluginContainsFMLMod": "true",
-    )
-}
-
-if (project.hasProperty('keyStore')) {
-    task signJar(type: SignJar, dependsOn: reobfJar) {
-        keyStore = project.keyStore
-        alias = project.keyStoreAlias
-        storePass = project.keyStorePass
-        keyPass = project.keyStoreKeyPass
-
-        inputFile = jar.archivePath
-        outputFile = jar.archivePath
-    }
-
-    build.dependsOn signJar
-}
-
-jar {
-    manifest {
-        from jenkinsManifest, gitManifest, fmlManifest
-    }
-
-    configurations.shade.each { dep ->
-        from(project.zipTree(dep)){
-            exclude 'META-INF', 'META-INF/**'
+    repositories {
+        maven {
+            url "file://${project.projectDir}/repo"
         }
     }
 }
 
-javadoc {
-    if (JavaVersion.current().isJava8Compatible()) {
-        options.addBooleanOption('Xdoclint:accessibility,html,syntax', true)
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+}
+
+// IDEA no longer automatically downloads sources/javadoc jars for dependencies, so we need to explicitly enable the behavior.
+idea {
+    module {
+        downloadSources = true
+        downloadJavadoc = true
     }
-}
-
-task updateTranslations(type: net.thesilkminer.gradle.plugin.translationchecker.tasks.TranslationCheckTask) {
-    modId = "openmods"
-    templateFileName = "en_us.lang"
-}
-
-task checkTranslations(type: net.thesilkminer.gradle.plugin.translationchecker.tasks.TranslationCheckTask) {
-    modId = "openmods"
-    dryRun = true
-    templateFileName = "en_us.lang"
-}
-
-task wrapper (type: Wrapper) {
-    gradleVersion = "2.14"
-}
-
-task generateOrientationDetails(type: JavaExec, dependsOn: compileJava) {
-   main = "openmods.geometry.OrientationInfoGenerator"
-   classpath = sourceSets.main.runtimeClasspath + files(sourceSets.main.output.classesDir)
 }

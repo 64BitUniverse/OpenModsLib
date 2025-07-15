@@ -7,7 +7,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryBuilder;
-import openmods.OpenMods;
+import openmods.OpenModsOld;
 import openmods.utils.CommonRegistryCallbacks;
 import openmods.utils.RegistrationContextBase;
 
@@ -30,7 +30,7 @@ public class NetworkEventManager {
 	@SubscribeEvent
 	public static void registerRegistry(RegistryEvent.NewRegistry e) {
 		final IForgeRegistry<NetworkEventEntry> registry = new RegistryBuilder<NetworkEventEntry>()
-				.setName(OpenMods.location("network_events"))
+				.setName(OpenModsOld.location("network_events"))
 				.setType(NetworkEventEntry.class)
 				.setIDRange(0, 0xFFFF) // something, something, 64k
 				.addCallback(new Callbacks())

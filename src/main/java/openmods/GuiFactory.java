@@ -11,7 +11,7 @@ public class GuiFactory implements IModGuiFactory {
 
 	public static class ConfigScreen extends OpenModsConfigScreen {
 		public ConfigScreen(GuiScreen parent) {
-			super(parent, OpenMods.MODID, "OpenModsLib");
+			super(parent, OpenModsOld.MODID, "OpenModsLib");
 		}
 	}
 

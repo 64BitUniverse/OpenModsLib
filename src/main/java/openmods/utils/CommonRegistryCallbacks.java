@@ -10,14 +10,14 @@ import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import net.minecraftforge.registries.IForgeRegistryInternal;
 import net.minecraftforge.registries.RegistryManager;
-import openmods.OpenMods;
+import openmods.OpenModsOld;
 import openmods.network.rpc.MethodEntry;
 
 public abstract class CommonRegistryCallbacks<T, E extends IForgeRegistryEntry<E>> implements IForgeRegistry.AddCallback<E>, IForgeRegistry.ClearCallback<E>, IForgeRegistry.CreateCallback<E> {
 
-	private static final ResourceLocation OBJECT_TO_ENTRY = OpenMods.location("object_to_entry");
+	private static final ResourceLocation OBJECT_TO_ENTRY = OpenModsOld.location("object_to_entry");
 
-	private static final ResourceLocation ENTRY_TO_ID = OpenMods.location("entry_to_id");
+	private static final ResourceLocation ENTRY_TO_ID = OpenModsOld.location("entry_to_id");
 
 	protected abstract T getWrappedObject(E entry);
 

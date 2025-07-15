@@ -11,7 +11,7 @@ import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryBuilder;
-import openmods.OpenMods;
+import openmods.OpenModsOld;
 import openmods.utils.CommonRegistryCallbacks;
 import openmods.utils.RegistrationContextBase;
 
@@ -34,7 +34,7 @@ public class SyncableObjectTypeRegistry {
 				.setIDRange(0, 0xFFFF)
 				.setType(SyncableObjectType.class)
 				.disableSaving()
-				.setName(OpenMods.location("syncable_object_type"))
+				.setName(OpenModsOld.location("syncable_object_type"))
 				.create();
 
 	}

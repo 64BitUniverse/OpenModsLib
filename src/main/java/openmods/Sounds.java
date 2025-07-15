@@ -8,7 +8,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry.ObjectHolder;
 import net.minecraftforge.registries.IForgeRegistry;
 
-@ObjectHolder(OpenMods.MODID)
+@ObjectHolder(OpenModsOld.MODID)
 @EventBusSubscriber
 public class Sounds {
 	@ObjectHolder("pageturn")
@@ -21,7 +21,7 @@ public class Sounds {
 	}
 
 	private static void registerSound(IForgeRegistry<SoundEvent> registry, String id) {
-		final ResourceLocation resourceLocation = OpenMods.location(id);
+		final ResourceLocation resourceLocation = OpenModsOld.location(id);
 		registry.register(new SoundEvent(resourceLocation).setRegistryName(resourceLocation));
 	}
 }

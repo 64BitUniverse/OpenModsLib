@@ -6,7 +6,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
-import openmods.OpenMods;
+import openmods.OpenModsOld;
 import openmods.utils.NetUtils;
 
 @Sharable
@@ -39,7 +39,7 @@ public class InboundSyncHandler extends SimpleChannelInboundHandler<FMLProxyPack
 			private ISyncMapProvider findSyncMapProvider(PacketBuffer payload) {
 				final int ownerType = payload.readVarInt();
 
-				final World world = OpenMods.proxy.getClientWorld();
+				final World world = OpenModsOld.proxy.getClientWorld();
 
 				switch (ownerType) {
 					case SyncMapEntity.OWNER_TYPE:

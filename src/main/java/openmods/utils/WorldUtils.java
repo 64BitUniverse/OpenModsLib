@@ -7,7 +7,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
-import openmods.OpenMods;
+import openmods.OpenModsOld;
 
 public class WorldUtils {
 
@@ -16,9 +16,9 @@ public class WorldUtils {
 	public static World getWorld(Side side, int dimensionId) {
 		final World result;
 		if (side == Side.SERVER) {
-			result = OpenMods.proxy.getServerWorld(dimensionId);
+			result = OpenModsOld.proxy.getServerWorld(dimensionId);
 		} else {
-			result = OpenMods.proxy.getClientWorld();
+			result = OpenModsOld.proxy.getClientWorld();
 			Preconditions.checkArgument(result.provider.getDimension() == dimensionId, "Invalid client dimension id %s", dimensionId);
 		}
 

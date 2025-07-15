@@ -13,7 +13,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.RegistryBuilder;
-import openmods.OpenMods;
+import openmods.OpenModsOld;
 import openmods.network.Dispatcher;
 import openmods.network.ExtendedOutboundHandler;
 import openmods.network.senders.IPacketSender;
@@ -48,7 +48,7 @@ public class RpcCallDispatcher extends Dispatcher {
 	public static void registerRegistry(RegistryEvent.NewRegistry e) {
 		final IForgeRegistry<MethodEntry> methodRegistry = new RegistryBuilder<MethodEntry>()
 				.setIDRange(0, 0x0FFFFF)
-				.setName(OpenMods.location("rpc_methods"))
+				.setName(OpenModsOld.location("rpc_methods"))
 				.setType(MethodEntry.class)
 				.disableSaving()
 				.addCallback(new MethodsCallbacks())
@@ -56,7 +56,7 @@ public class RpcCallDispatcher extends Dispatcher {
 
 		final IForgeRegistry<TargetTypeProvider> targetRegistry = new RegistryBuilder<TargetTypeProvider>()
 				.setIDRange(0, 0xFF)
-				.setName(OpenMods.location("rpc_targets"))
+				.setName(OpenModsOld.location("rpc_targets"))
 				.setType(TargetTypeProvider.class)
 				.disableSaving()
 				.addCallback(new TargetTypeCallbacks())

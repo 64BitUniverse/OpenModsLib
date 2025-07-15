@@ -14,7 +14,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.internal.FMLProxyPacket;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.registries.IForgeRegistry;
-import openmods.OpenMods;
+import openmods.OpenModsOld;
 import openmods.utils.CommonRegistryCallbacks;
 
 @Sharable
@@ -87,7 +87,7 @@ public class RpcCallCodec extends MessageToMessageCodec<FMLProxyPacket, RpcCall>
 
 	protected EntityPlayer getPlayer(FMLProxyPacket msg) {
 		INetHandler handler = msg.handler();
-		EntityPlayer player = OpenMods.proxy.getPlayerFromHandler(handler);
+		EntityPlayer player = OpenModsOld.proxy.getPlayerFromHandler(handler);
 		Preconditions.checkNotNull(player, "Can't get player from handler %s", handler);
 		return player;
 	}
